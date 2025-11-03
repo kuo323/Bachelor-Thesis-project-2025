@@ -24,7 +24,7 @@ public class RotationGainController : MonoBehaviour
     void Update()
     {
         // Only apply gain if player is outside boundary
-        if (boundaryChecker != null && boundaryChecker.IsOutside())
+        if (boundaryChecker != null && boundaryChecker.IsOutside() && boundaryChecker.IsFacingCenter())
         {
             ApplyRotationGain();
         }
@@ -37,7 +37,7 @@ public class RotationGainController : MonoBehaviour
     {
 
         Debug.Log("gain is applied");
-        
+
         float currentYaw = head.eulerAngles.y;
         float deltaYaw = Mathf.DeltaAngle(lastHeadYaw, currentYaw);
 
@@ -46,4 +46,10 @@ public class RotationGainController : MonoBehaviour
 
         rig.Rotate(Vector3.up, virtualRotation);
     }
+
+
+
+
+   
+
 }

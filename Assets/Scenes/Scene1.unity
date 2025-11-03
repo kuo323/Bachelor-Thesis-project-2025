@@ -8826,8 +8826,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rig: {fileID: 853662521}
-  boundarySize: 1
+  head: {fileID: 853662521}
+  boundarySize: 2
   roomCenter: {x: 0, y: 0, z: 0}
+  gainIsApplied: 0
+  angleThreshold: 60
 --- !u!4 &1603656502
 Transform:
   m_ObjectHideFlags: 0
