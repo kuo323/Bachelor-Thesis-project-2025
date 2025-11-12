@@ -2895,6 +2895,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 736182906}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &540425672
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 540425673}
+  - component: {fileID: 540425674}
+  m_Layer: 0
+  m_Name: DistractionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &540425673
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 540425672}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.04274, y: 0.0254, z: -0.0053}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &540425674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 540425672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a7a561360d149d4a81cc09cabc7e546, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orbClusterPrefab: {fileID: 8888256157671488156, guid: f5ccf961191578e45b56f1d010425c43, type: 3}
+  orbPrefab: {fileID: 3489200695157494788, guid: 5bb993d221477d44688d02f60b092ba1, type: 3}
+  playerHead: {fileID: 853662521}
+  minOrbsPerCluster: 3
+  maxOrbsPerCluster: 6
+  totalClusters: 1
+  spawnRadius: 1
 --- !u!1 &555059291
 GameObject:
   m_ObjectHideFlags: 0
@@ -8804,6 +8855,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1603656502}
+  - component: {fileID: 1603656504}
   - component: {fileID: 1603656501}
   - component: {fileID: 1603656503}
   m_Layer: 0
@@ -8825,10 +8877,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbdf491ff175b1145bf3f4a5e09f5cf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rig: {fileID: 853662521}
-  head: {fileID: 853662521}
   boundarySize: 2
-  roomCenter: {x: 0, y: 0, z: 0}
   gainIsApplied: 0
   angleThreshold: 60
 --- !u!4 &1603656502
@@ -8840,7 +8889,7 @@ Transform:
   m_GameObject: {fileID: 1603656500}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.02981, y: 0, z: 0.50519}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8858,10 +8907,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c0a17d0396eec44b17419a4c4d7043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rig: {fileID: 1540296785}
-  head: {fileID: 853662521}
   gainMultiplier: 1.5
   boundaryChecker: {fileID: 1603656501}
+--- !u!114 &1603656504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603656500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc5c0c5e7887bda4b8f1fbfc7627f4e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rig: {fileID: 1540296785}
+  head: {fileID: 853662521}
+  roomCenter: {x: 0, y: 0, z: 0}
 --- !u!1 &1604207758
 GameObject:
   m_ObjectHideFlags: 0
@@ -11811,3 +11873,4 @@ SceneRoots:
   - {fileID: 1603656502}
   - {fileID: 1540296785}
   - {fileID: 1972716642}
+  - {fileID: 540425673}
