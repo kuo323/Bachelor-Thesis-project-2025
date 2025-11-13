@@ -15,13 +15,22 @@ public class RoomBounderiesChecker : MonoBehaviour
 
     private bool wasOutside = false; // Track last frame’s state
 
-    public bool gainIsApplied = false;
+    public bool activeDistraction = false;
+
+
+    
+
 
     [Header("Facing Center Settings")]
     public float angleThreshold = 90f;
 
 
-    
+   
+
+    [SerializeField] private DistractionManager distractionManager;
+
+
+
 
     void Start()
     {
@@ -38,24 +47,43 @@ public class RoomBounderiesChecker : MonoBehaviour
 
         head.transform.position = roomCenter;
         Debug.Log("✅ Player position reset to center.");
+
+
+
+       
+
+
     }
 
     void Update()
     {
        
+        /////checking this 2 conditions by running their calculations in their own functions below /////
+
         bool facingCenter = IsFacingCenter();
-        
-        
         bool isOutside = IsOutside();
 
 
-      
+
+
+        if (isOutside && !activeDistraction)
+        {
+
+            activeDistraction = true;
+
+            distractionManager.SpawnCluster();
+
+
+
+        }
+
+    
 
 
         if (facingCenter && isOutside)
         {
 
-            Debug.LogWarning("🚨 Player is looking at the center and it is outside");
+        //    Debug.LogWarning("🚨 Player is looking at the center and it is outside");
 
         }
 
@@ -75,7 +103,10 @@ public class RoomBounderiesChecker : MonoBehaviour
 
         wasOutside = isOutside;
 
-        gainIsApplied = isOutside && !facingCenter;
+      
+
+       
+
 
     }
 

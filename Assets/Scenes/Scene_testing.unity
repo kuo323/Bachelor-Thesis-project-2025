@@ -2921,7 +2921,7 @@ Transform:
   m_GameObject: {fileID: 540425672}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.04274, y: 0.0254, z: -0.0053}
+  m_LocalPosition: {x: 0.04274, y: 1, z: -0.0053}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2941,11 +2941,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orbClusterPrefab: {fileID: 8888256157671488156, guid: f5ccf961191578e45b56f1d010425c43, type: 3}
   orbPrefab: {fileID: 3489200695157494788, guid: 5bb993d221477d44688d02f60b092ba1, type: 3}
-  playerHead: {fileID: 853662521}
-  minOrbsPerCluster: 3
-  maxOrbsPerCluster: 6
-  totalClusters: 1
-  spawnRadius: 1
+  clusterSize: {x: 4, y: 0.5, z: 1.4}
+  minOrbsPerCluster: 50
+  maxOrbsPerCluster: 10
+  rotationSpeed: 10
+  followSpeed: 10
+  minDistance: 0.6
+  maxDistance: 1
 --- !u!1 &555059291
 GameObject:
   m_ObjectHideFlags: 0
@@ -8878,8 +8880,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boundarySize: 2
-  gainIsApplied: 0
+  activeDistraction: 0
   angleThreshold: 60
+  distractionManager: {fileID: 540425674}
 --- !u!4 &1603656502
 Transform:
   m_ObjectHideFlags: 0
@@ -11871,6 +11874,6 @@ SceneRoots:
   - {fileID: 1247321954}
   - {fileID: 132992934}
   - {fileID: 1603656502}
+  - {fileID: 540425673}
   - {fileID: 1540296785}
   - {fileID: 1972716642}
-  - {fileID: 540425673}

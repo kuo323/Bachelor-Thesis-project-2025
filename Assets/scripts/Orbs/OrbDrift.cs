@@ -11,7 +11,9 @@ public class OrbDrift : MonoBehaviour
     {
         startPos = transform.localPosition;
         driftSpeed = Random.Range(0.5f, 1.5f);
-        driftAmount = Random.Range(3.0f, 3.0f);  //// Sets how far the object can drift from its starting position.
+        driftAmount = Random.Range(0.3f, 0.3f);  //// Sets how far each object can drift from its starting position.
+
+
         randomDir = Random.onUnitSphere;   //// Generates a random unit vector in 3D space (direction) for the drift.
         randomDir.y = Mathf.Abs(randomDir.y); // Makes the Y component of the drift positive, so the object tends to move upward instead of downward.
     }

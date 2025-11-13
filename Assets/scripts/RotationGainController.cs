@@ -47,7 +47,7 @@ public class RotationGainController : MonoBehaviour
         {
 
             
-            ApplyRotationGain();
+           // ApplyRotationGain();
         }
 
         // Update last yaw for next frame
