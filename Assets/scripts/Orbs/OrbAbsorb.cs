@@ -2,25 +2,29 @@ using UnityEngine;
 
 public class OrbAbsorb : MonoBehaviour
 {
-    public float absorbTime = 1.0f;
-    private float touchTimer = 0f;
-    private bool absorbed = false;
+    private bool isTouched = false;
 
-    public System.Action OnAbsorbed; // Event for parent to handle
+    private OrbDrift orbDrift;
 
-    private void OnTriggerStay(Collider other)
+
+
+
+    private void Start()
     {
-        if (absorbed) return;
 
-        // Assuming player's hand or controller has tag "PlayerHand"
+        // grab the OrbDrift script dynamically when it is not hooked on any object 
+        orbDrift = GetComponent<OrbDrift>();
+
+    }
+
+
+
+
+    private void OnTriggerEnter(Collider other)
+    {
         if (other.CompareTag("PlayerHand"))
         {
-            touchTimer += Time.deltaTime;
-
-            if (touchTimer >= absorbTime)
-            {
-                Absorb();
-            }
+            isTouched = true;
         }
     }
 
@@ -28,31 +32,38 @@ public class OrbAbsorb : MonoBehaviour
     {
         if (other.CompareTag("PlayerHand"))
         {
-            touchTimer = 0f; // reset timer if player stops touching
+            isTouched = false;
         }
     }
 
-    void Absorb()
+    private void Update()
     {
-        absorbed = true;
+        bool rightTrigger = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch);
 
-        // Shrink and fade
-        StartCoroutine(ShrinkAndDisappear());
-
-        // Notify parent
-        OnAbsorbed?.Invoke();
-    }
-
-    System.Collections.IEnumerator ShrinkAndDisappear()
-    {
-        float t = 0f;
-        Vector3 startScale = transform.localScale;
-        while (t < 1f)
+        if (isTouched && rightTrigger)
         {
-            t += Time.deltaTime;
-            transform.localScale = Vector3.Lerp(startScale, Vector3.zero, t);
-            yield return null;
+
+
+            // Get parent object of the objects tthat just get hit 
+            Transform cluster = transform.parent;
+           //// Loop through all orbs in the cluster with foreach
+            foreach (Transform orb in cluster)
+            {
+                if (orb == transform) continue; // skip the hit orb
+
+                OrbDrift drift = orb.GetComponent<OrbDrift>();
+                if (drift != null)
+                    drift.Oncehit();
+            }
+
+            // Absorb/destroy the hit orb
+            Absorb();
         }
+    }
+
+    private void Absorb()
+    {
+        // Optional: play particle, sound, animation here
         Destroy(gameObject);
     }
 }
