@@ -73,7 +73,7 @@ public class RoomBounderiesChecker : MonoBehaviour
 
             distractionManager.SpawnCluster();
 
-
+            
 
         }
 

@@ -1,8 +1,14 @@
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class DistractionManager : MonoBehaviour
 {
+
+    public RotationGainController rotationGainController; // assign your rig's controller in Inspector
+
+
+
     [Header("Prefabs")]
     public GameObject orbClusterPrefab; // empty cluster prefab
     public GameObject orbPrefab;        // your custom orb prefab
@@ -21,8 +27,15 @@ public class DistractionManager : MonoBehaviour
     private Vector3 orbitCenter;
 
     [Header("Orbit Settings")]
-    public float rotationSpeed = 10f;        // degrees per second
+    public float rotationSpeed = 20f;        // degrees per second
     public float followSpeed = 2f;           // how fast orbit center follows player
+
+
+
+    public bool isHit = false;
+    public float rotationSpeedAfterHit = 40f;
+    public float afterHitSpeedDuration = 5f;
+
 
     [Header("Distance Oscillation")]
     public float minDistance = 0.3f;
@@ -41,6 +54,24 @@ public class DistractionManager : MonoBehaviour
             RotateCluster();
             UpdateOrbitDistance();
         }
+
+
+
+        if (isHit)
+        {
+
+            if (afterHitSpeedDuration > 0)
+            {
+
+                rotationSpeed = rotationSpeedAfterHit;
+
+                afterHitSpeedDuration -= Time.deltaTime;
+
+            }
+
+        }
+
+
     }
 
     public void SpawnCluster()
@@ -71,8 +102,19 @@ public class DistractionManager : MonoBehaviour
                 Random.Range(-clusterSize.z / 2f, clusterSize.z / 2f)
             );
 
-            orb.AddComponent<OrbDrift>();
-            orb.AddComponent<OrbAbsorb>();
+
+
+
+            // adding two components- OrbDrift and OrbAbsorb to the same GameObject (orb): 
+            /// store these 2 scripts dynamically in a dynamic game obejct =orb
+            /// cause they are not attached to any gameobject in my scene  
+
+            OrbDrift drift = orb.AddComponent<OrbDrift>();
+            OrbAbsorb absorb = orb.AddComponent<OrbAbsorb>();
+
+            absorb.rotationGainController = rotationGainController;  /// send the rotaionGainController data to the rotationGainController in the OrbAbsord script
+            absorb.distractionManager = this;
+
         }
     }
 
@@ -103,5 +145,22 @@ public class DistractionManager : MonoBehaviour
         // Slowly move orbit center toward player
         orbitCenter = Vector3.Lerp(orbitCenter, head.position, Time.deltaTime * followSpeed);
     }
+
+
+
+    public void afterHit()
+    {
+
+
+        isHit = true;
+
+
+    }
+
+
+
+
+
+
 }
 

@@ -9,6 +9,11 @@ public class RotationGainController : MonoBehaviour
 
 
 
+    [Header("GainSettings")]
+    private float gainDuration = 0f;
+    public float burstDuration = 0.5f; // how long gain stays active
+
+
     [Header("Settings")]
     public float gainMultiplier = 1.5f;  // 1.05 = 5% rotation gain
     public RoomBounderiesChecker boundaryChecker;
@@ -41,31 +46,44 @@ public class RotationGainController : MonoBehaviour
     {
 
 
+      
 
-        // Only apply gain if player is outside boundary
-        if (boundaryChecker.IsOutside() && !boundaryChecker.IsFacingCenter())
+
+        if (gainDuration > 0f)
         {
-
             
-           // ApplyRotationGain();
+            
+            
+            float currentYaw = head.eulerAngles.y;
+            float deltaYaw = Mathf.DeltaAngle(lastHeadYaw, currentYaw);
+
+            float virtualRotation = deltaYaw * (gainMultiplier - 1f);
+            rig.Rotate(Vector3.up, virtualRotation);
+
+            gainDuration -= Time.deltaTime;
+
+
+            Debug.Log($"deltaYaw={deltaYaw} virtualRotation={virtualRotation}");
+
+
+
         }
 
-        // Update last yaw for next frame
+
+
+
         lastHeadYaw = head.eulerAngles.y;
     }
 
-    void ApplyRotationGain()
+    public void ApplyRotationGain()
     {
 
-        Debug.Log("gain is applied");
 
-        float currentYaw = head.eulerAngles.y;
-        float deltaYaw = Mathf.DeltaAngle(lastHeadYaw, currentYaw);
+        gainDuration = burstDuration;
 
-        // Apply the rotation gain to the *rig*
-        float virtualRotation = deltaYaw * (gainMultiplier - 1f);
+        Debug.Log("Rotation gain triggered! burstDuration=" + burstDuration);
 
-        rig.Rotate(Vector3.up, virtualRotation);
+
     }
 
 

@@ -3076,6 +3076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a7a561360d149d4a81cc09cabc7e546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationGainController: {fileID: 1603656503}
   orbClusterPrefab: {fileID: 8888256157671488156, guid: f5ccf961191578e45b56f1d010425c43, type: 3}
   orbPrefab: {fileID: 3489200695157494788, guid: 5bb993d221477d44688d02f60b092ba1, type: 3}
   clusterSize: {x: 4, y: 0.5, z: 1.4}
@@ -3083,6 +3084,9 @@ MonoBehaviour:
   maxOrbsPerCluster: 10
   rotationSpeed: 20
   followSpeed: 10
+  isHit: 0
+  rotationSpeedAfterHit: 100
+  afterHitSpeedDuration: 2
   minDistance: 0.6
   maxDistance: 1
   distanceOscillationSpeed: 1
@@ -9048,6 +9052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c0a17d0396eec44b17419a4c4d7043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  burstDuration: 0.5
   gainMultiplier: 1.5
   boundaryChecker: {fileID: 1603656501}
 --- !u!114 &1603656504
