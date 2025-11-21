@@ -10,8 +10,12 @@ public class RoomBounderiesChecker : MonoBehaviour
     private Vector3 roomCenter;
 
     [Header("Room Settings")]
-    public float boundarySize = 4f;
    
+
+    public Vector2 roomSize = new Vector2(4f, 4f); // X and Z size
+    public float triggerDistanceFromBoundary = 1f; // distance inside room edge
+
+
 
     private bool wasOutside = false; // Track last frame’s state
 
@@ -114,11 +118,19 @@ public class RoomBounderiesChecker : MonoBehaviour
     {
         if (head == null) return false;
 
-        Vector3 pos = head.position;
-        float half = boundarySize / 2f;
+        float halfX = roomSize.x / 2f;
+        float halfZ = roomSize.y / 2f;
 
-        return Mathf.Abs(pos.x - roomCenter.x) > half || Mathf.Abs(pos.z - roomCenter.z) > half;
-    }
+        // Trigger boundary is 1 meter inside room edge
+        float triggerX = halfX - triggerDistanceFromBoundary;
+        float triggerZ = halfZ - triggerDistanceFromBoundary;
+
+        Vector3 pos = head.position;
+
+        return Mathf.Abs(pos.x - roomCenter.x) > triggerX ||
+               Mathf.Abs(pos.z - roomCenter.z) > triggerZ;
+    
+     }
 
     public bool IsFacingCenter()
     {

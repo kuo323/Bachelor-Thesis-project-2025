@@ -10,11 +10,17 @@ public class OrbAbsorb : MonoBehaviour
     [HideInInspector] public RotationGainController rotationGainController; // set from DistractionManager
     [HideInInspector] public DistractionManager distractionManager; // new reference
 
-    private bool isTouched = false;
-
     private OrbDrift orbDrift;
 
-    
+
+    private bool isTouched = false;
+    private bool isBeingAbsorbed = false;
+
+
+    public float absorbDuration = 2f;  // how fast the orb shrinks & gets sucked in
+    public float absorbSpeed = 5f;        // movement speed toward stick
+
+    private Transform absorberStick;      // reference to the stick that touched the orb
 
 
 
@@ -56,7 +62,7 @@ public class OrbAbsorb : MonoBehaviour
         bool rightTrigger = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch);
 
       
-        if (isTouched && rightTrigger)
+        if (isTouched && rightTrigger && !isBeingAbsorbed)
         {
 
 
@@ -84,24 +90,47 @@ public class OrbAbsorb : MonoBehaviour
 
 
 
-            
-             Absorb();
 
-            
+            // Start absorption animation
+            StartCoroutine(Absorb());
+
+
 
 
         }
     }
 
-    private void Absorb()
+    private System.Collections.IEnumerator Absorb()
     {
-        // Optional: play particle, sound, animation here
+        isBeingAbsorbed = true;
+
+        Vector3 initialScale = transform.localScale;
+        float t = 0f;
+
+        while (t < absorbDuration)
+        {
+            t += Time.deltaTime;
+
+            // shrink
+            transform.localScale = Vector3.Lerp(initialScale, Vector3.zero, t / absorbDuration);
+
+            // move toward stick Z direction (forward)
+            if (absorberStick != null)
+            {
+                transform.position = Vector3.MoveTowards(
+                    transform.position,
+                    absorberStick.position + absorberStick.forward * 0.1f,
+                    absorbSpeed * Time.deltaTime
+                );
+            }
+
+            yield return null;
+        }
+
         Destroy(gameObject);
     }
 
 
-
-  
 
 
 

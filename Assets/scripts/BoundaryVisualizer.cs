@@ -1,5 +1,7 @@
-using NUnit.Framework.Constraints;
 using UnityEngine;
+
+
+
 [RequireComponent(typeof(LineRenderer))]
 
 public class BoundaryVisualizer : MonoBehaviour
@@ -7,7 +9,7 @@ public class BoundaryVisualizer : MonoBehaviour
     public float boundarySize = 4f;          // 4x4 room
     public Vector3 roomCenter = Vector3.zero; // Center of room (Y ignored)
     private LineRenderer line;
-    private float HeightFromFloor = 0.5f;
+    private float HeightFromFloor = 0.1f;
 
     void Start()
     {
