@@ -1,85 +1,84 @@
-using Unity.VisualScripting;
+
 using UnityEngine;
 
 public class OrbDrift : MonoBehaviour
 {
     private Vector3 startPos;
-    private float driftSpeed;
-    private float driftAmount;
-    private Vector3 randomDir;
 
+    // drift parameters
+    private float driftAmount;
+    private float normalDriftAmount;
+    private float panicDriftAmount = 5.0f;  //// how far they spread out
+
+    // random noise offsets so each orb moves differently
+    private float noiseX;
+    private float noiseY;
+    private float noiseZ;
+
+    private float floatSpeed;
+    private float wanderSpeed;
 
     private bool isHit = false;
     private float hitTimer = 0f;
-    private float hitDuration = 2f;
-
-
-
-    private float normalDriftAmount;   // <- store original value
-    private float panicDriftAmount = 2.5f; // <- panic mode
+    private float hitDuration = 10f;
 
     void Start()
     {
         startPos = transform.localPosition;
-        driftSpeed = Random.Range(0.5f, 1.5f);
-        driftAmount = Random.Range(0.5f, 0.5f);  //// Sets how far each object can drift from its starting position.
 
+        floatSpeed = Random.Range(1f, 2f);       // vertical floating
+        wanderSpeed = Random.Range(1f, 2f);  // horizontal wandering
 
-        randomDir = Random.onUnitSphere;   //// Generates a random unit vector in 3D space (direction) for the drift.
-        randomDir.y = Mathf.Abs(randomDir.y); // Makes the Y component of the drift positive, so the object tends to move upward instead of downward.
+        driftAmount = Random.Range(6.5f, 1.4f);
+        normalDriftAmount = driftAmount;
 
-
-        normalDriftAmount = driftAmount;  //// store the reset value
-
-
-}
+        // give this orb its own perlin noise seed values
+        noiseX = Random.Range(800f, 999f);
+        noiseY = Random.Range(700f, 999f);
+        noiseZ = Random.Range(100f, 999f);
+    }
 
     void Update()
     {
-
-        /////If isHit is true, then targetAmount = panicDriftAmount (e.g., 2.5f). If isHit is false, then targetAmount = normalDriftAmount(e.g., 0.5f).////
+        // increase drift when hit (panic mode)
         float targetAmount = isHit ? panicDriftAmount : normalDriftAmount;
+        driftAmount = Mathf.Lerp(driftAmount, targetAmount, Time.deltaTime * 4f);
 
-        driftAmount = Mathf.Lerp(driftAmount, targetAmount, Time.deltaTime * 4f); // smooth transition
-        
+        // PERLIN-NOISE FIRELFY MOVEMENT ----------------------------
 
-        // Floating movement
-        transform.localPosition = startPos + randomDir * Mathf.Sin(Time.time * driftSpeed) * driftAmount;
+        float offsetX =
+            (Mathf.PerlinNoise(Time.time * wanderSpeed, noiseX) - 0.5f)
+            * driftAmount;
 
+        float offsetZ =
+            (Mathf.PerlinNoise(Time.time * wanderSpeed, noiseZ) - 0.5f)
+            * driftAmount;
 
+        float offsetY =
+            Mathf.Sin(Time.time * floatSpeed + noiseY)
+            * (driftAmount * 0.5f);   // vertical floating is smaller
 
+        // apply combined floating + wandering
+        transform.localPosition = startPos + new Vector3(offsetX, offsetY, offsetZ);
+
+        //------------------------------------------------------------
+
+        // handle hit timer
         if (isHit)
         {
-
-            //// starts counting up //// 
             hitTimer += Time.deltaTime;
-
             if (hitTimer >= hitDuration)
             {
-
                 isHit = false;
                 hitTimer = 0f;
-                // NO instant reset of driftAmount here!
-
             }
-
-
         }
-
-
-
-
-
     }
-
 
     public void Oncehit()
     {
-
         isHit = true;
         hitTimer = 0f;
-
-        
     }
 
 

@@ -127,12 +127,15 @@ public class OrbAbsorb : MonoBehaviour
             yield return null;
         }
 
+
+        // Notify manager that this orb is fully absorbed
+        distractionManager?.OrbAbsorbed();
+
         Destroy(gameObject);
     }
 
 
 
-
-
+  
 
 }
