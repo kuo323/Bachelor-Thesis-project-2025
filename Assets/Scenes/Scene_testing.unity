@@ -3783,7 +3783,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationGainController: {fileID: 1603656503}
   orbClusterPrefab: {fileID: 8888256157671488156, guid: f5ccf961191578e45b56f1d010425c43, type: 3}
-  orbPrefab: {fileID: 3489200695157494788, guid: 5bb993d221477d44688d02f60b092ba1, type: 3}
+  orbPrefab: {fileID: 6820142306699182240, guid: 3beebd11448f7e84185fbcbd221377ea, type: 3}
   clusterSize: {x: 2, y: 1, z: 2}
   minOrbsPerCluster: 100
   maxOrbsPerCluster: 250
@@ -3795,7 +3795,7 @@ MonoBehaviour:
   minSwitchTime: 1
   maxSwitchTime: 2.5
   minDistance: 0.7
-  maxDistance: 1.3
+  maxDistance: 1.2
   distanceOscillationSpeed: 1
   roomCenter: {x: 0, y: 0, z: 0}
   moveToCenterSpeed: 0.6

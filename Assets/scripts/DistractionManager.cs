@@ -36,7 +36,7 @@ public class DistractionManager : MonoBehaviour
     private float orbitRadius;
 
 
-    private float spawnSmoothTime = 1f; // seconds to ignore orbit distance updates
+    private float spawnSmoothTime = 2f; // seconds to ignore orbit distance updates
     private float spawnTimer = 0f;        // countdown timer
 
 
@@ -65,7 +65,7 @@ public class DistractionManager : MonoBehaviour
     void Start()
     {
         head = CameraManager.Instance.head;
-        ResetOrbitBehavior();
+        //ResetOrbitBehavior();
     }
 
     void Update()
@@ -145,7 +145,8 @@ public class DistractionManager : MonoBehaviour
         currentCluster = Instantiate(orbClusterPrefab, spawnPos, Quaternion.identity);
         orbitCenter = head.position;
 
-        orbitRadius = Vector3.Distance(currentCluster.transform.position, head.position);
+       // orbitRadius = Vector3.Distance(currentCluster.transform.position, head.position);
+        orbitRadius = (minDistance + maxDistance) / 2f;
 
 
         spawnTimer = spawnSmoothTime;
@@ -180,16 +181,21 @@ public class DistractionManager : MonoBehaviour
     {
         if (currentCluster == null) return;
 
+        if (spawnTimer > 0f) return;
+
+
+
+        // Smooth orbit radius update to prevent sudden jumps
+        float currentDistance = Vector3.Distance(currentCluster.transform.position, head.position);
+        orbitRadius = Mathf.Lerp(orbitRadius, currentDistance, Time.deltaTime * 2f);
+
         angle += rotationDir * rotationSpeed * Time.deltaTime;
         float rad = angle * Mathf.Deg2Rad;
 
-        float radius = orbitRadius;
-
         Vector3 center = orbitCenter;
 
-        float x = center.x + Mathf.Cos(rad) * radius;
-        float z = center.z + Mathf.Sin(rad) * radius;
-
+        float x = center.x + Mathf.Cos(rad) * orbitRadius;
+        float z = center.z + Mathf.Sin(rad) * orbitRadius;
         float y = currentCluster.transform.position.y;
 
         currentCluster.transform.position = new Vector3(x, y, z);
