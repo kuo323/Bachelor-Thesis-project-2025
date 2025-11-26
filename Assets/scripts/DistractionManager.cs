@@ -217,6 +217,11 @@ public class DistractionManager : MonoBehaviour
         currentCluster.transform.position = newPos;
 
         orbitCenter = Vector3.Lerp(orbitCenter, head.position, Time.deltaTime * followSpeed);
+
+
+
+
+
     }
 
     public void afterHit() { isHit = true; }

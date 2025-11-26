@@ -2,145 +2,94 @@
 
 public class RoomBounderiesChecker : MonoBehaviour
 {
+    // --- REQUIRED REFERENCES ---
+    [Header("Core References")]
+    public RotationGainController rotationGainController;
+    public Transform head; // The user's current physical position
 
+    // --- ROOM AND CHECK SETTINGS ---
+    [Header("Tunnel/Boundary Settings")]
+    // The Z-coordinate where the reset should be triggered (the end of the tunnel)
+    public float tunnelEndTriggerZ = 3.0f;
 
-    private Transform head;
-  //  public Vector3 roomCenter = Vector3.zero;
+    // The width of the play area (used for continuous gain, kept here for context)
+    public float playAreaWidth = 3.0f;
 
-    private Vector3 roomCenter;
+    // This flag is crucial to prevent multiple reset coroutines from stacking
+    private bool resetTriggered = false;
 
-    [Header("Room Settings")]
-   
-
-    public Vector2 roomSize = new Vector2(4f, 4f); // X and Z size
-    public float triggerDistanceFromBoundary = 1f; // distance inside room edge
-
-
-
-    private bool wasOutside = false; // Track last frame’s state
-
-    public bool activeDistraction = false;
-
-
-    
-
-
-    [Header("Facing Center Settings")]
-    public float angleThreshold = 90f;
-
-
-   
-
-    [SerializeField] private DistractionManager distractionManager;
-
-
-
+    // =========================================================================
 
     void Start()
     {
-
-        roomCenter = CameraManager.Instance.roomCenter;
-        head = CameraManager.Instance.head;
-       
-
-        if (head == null)
+        if (head == null || rotationGainController == null)
         {
-            Debug.LogError("Rig not assigned!");
+            Debug.LogError("❌ Missing Head or RotationGainController reference! Script disabled.");
+            enabled = false;
             return;
         }
 
-        head.transform.position = roomCenter;
-        Debug.Log("✅ Player position reset to center.");
+        // Set the room center to the origin (0, 0, 0) as is standard for RDW setup.
+        // We will only check the Z-axis for the tunnel end trigger.
+        // roomCenter = Vector3.zero; // Note: We don't use this variable in the new Z-axis check
 
+        // Ensure the rotation controller knows the play area width
+        rotationGainController.playAreaWidth = playAreaWidth;
 
-
-       
-
-
+        Debug.Log("✅ RoomBounderiesChecker initialized. Monitoring Z-axis for tunnel end.");
     }
 
     void Update()
     {
-       
-        /////checking this 2 conditions by running their calculations in their own functions below /////
-
-        bool facingCenter = IsFacingCenter();
-        bool isOutside = IsOutside();
+        // 1. Activate/Deactivate Continuous Gain based on X-axis (Lateral Position)
+        bool isLateralBoundaryHit = IsLaterallyOutside();
+        rotationGainController.isRedirectionActive = isLateralBoundaryHit;
 
 
+        // 2. Check for the Hard Boundary Reset (Tunnel End)
+        bool isTunnelEndHit = IsTunnelEndHit();
 
-
-        if (isOutside && !activeDistraction)
+        if (isTunnelEndHit)
         {
+            // If user passed the end of the tunnel AND we are not already resetting:
+            if (!resetTriggered)
+            {
+                // Trigger the Turning-Based Reset
+                rotationGainController.TriggerBoundaryReset();
+                resetTriggered = true; // This stays TRUE forever, preventing re-triggering
 
-            activeDistraction = true;
-
-            distractionManager.SpawnCluster();
-
-            
-
+                Debug.LogWarning("🚨 Hard Boundary Triggered! Initiating Turning-Based Reset (Single Use).");
+            }
         }
 
-    
-
-
-        if (facingCenter && isOutside)
-        {
-
-        //    Debug.LogWarning("🚨 Player is looking at the center and it is outside");
-
-        }
-
-
-        // Only log when the state CHANGES
-        if (isOutside && !wasOutside)
-        {
-            Debug.LogWarning("🚨 Player is OUTSIDE the boundary!");
-
- 
-            
-        }
-        else if (!isOutside && wasOutside)
-        {
-            Debug.Log("✅ Player re-entered the boundary.");
-        }
-
-        wasOutside = isOutside;
-
-      
-
-       
-
-
+        // DELETE THE 'ELSE' BLOCK that would reset the flag based on position.
     }
 
-    public bool IsOutside()
+    // =========================================================================
+    // BOUNDARY CHECK FUNCTIONS
+    // =========================================================================
+
+    // Checks if the user has reached the end of the tunnel (Z-axis boundary)
+    public bool IsTunnelEndHit()
     {
         if (head == null) return false;
 
-        float halfX = roomSize.x / 2f;
-        float halfZ = roomSize.y / 2f;
-
-        // Trigger boundary is 1 meter inside room edge
-        float triggerX = halfX - triggerDistanceFromBoundary;
-        float triggerZ = halfZ - triggerDistanceFromBoundary;
-
-        Vector3 pos = head.position;
-
-        return Mathf.Abs(pos.x - roomCenter.x) > triggerX ||
-               Mathf.Abs(pos.z - roomCenter.z) > triggerZ;
-    
-     }
-
-    public bool IsFacingCenter()
-    {
-
-        //// This returns true if the angle is bigger than your threshold ///
-
-        Vector3 toCenter = (roomCenter - head.position).normalized;
-        Vector3 forward = new Vector3(head.forward.x, 0, head.forward.z).normalized;
-
-        float angle = Vector3.Angle(forward, toCenter);
-        return angle < angleThreshold;
+        // Trigger when the user's Z-position exceeds the set tunnel end coordinate.
+        return head.position.z > tunnelEndTriggerZ;
     }
+
+    // Checks if the user is outside the safety margin on the sides (X-axis)
+    public bool IsLaterallyOutside()
+    {
+        if (head == null) return false;
+
+        // Use the lateral threshold from the rotation controller (e.g., half the play area width)
+        float halfWidth = playAreaWidth / 2f;
+
+        // This check determines when the subtle continuous gain should be active
+        return Mathf.Abs(head.position.x) > (halfWidth * 0.5f); // Example: start steering when halfway to the edge
+    }
+
+    // Public function called by the RotationGainController after the reset coroutine finishes
+  
 }

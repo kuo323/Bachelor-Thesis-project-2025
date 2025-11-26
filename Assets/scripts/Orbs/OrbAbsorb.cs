@@ -68,7 +68,7 @@ public class OrbAbsorb : MonoBehaviour
 
             // Apply rotation gain first
 
-           rotationGainController?.ApplyRotationGain();
+         //  rotationGainController?.ApplyRotationGain();
 
 
 
