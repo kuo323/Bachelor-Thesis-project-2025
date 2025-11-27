@@ -8,7 +8,7 @@ public class OrbDrift : MonoBehaviour
     // drift parameters
     private float driftAmount;
     private float normalDriftAmount;
-    private float panicDriftAmount = 5.0f;  //// how far they spread out
+    private float panicDriftAmount = 9.0f;  //// how far they spread out
 
     // random noise offsets so each orb moves differently
     private float noiseX;
@@ -29,7 +29,7 @@ public class OrbDrift : MonoBehaviour
         floatSpeed = Random.Range(1f, 2f);       // vertical floating
         wanderSpeed = Random.Range(1f, 2f);  // horizontal wandering
 
-        driftAmount = Random.Range(6.5f, 1.4f);
+        driftAmount = Random.Range(6.5f, 3.0f);
         normalDriftAmount = driftAmount;
 
         // give this orb its own perlin noise seed values

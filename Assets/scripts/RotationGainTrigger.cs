@@ -3,6 +3,7 @@
 public class RotationGainTrigger : MonoBehaviour
 {
     public RotationGainController gainController;
+    
 
     private void OnTriggerEnter(Collider other)
     {

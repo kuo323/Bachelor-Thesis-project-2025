@@ -140,7 +140,9 @@ public class DistractionManager : MonoBehaviour
 
         Vector3 forwardOffset = head.forward * maxDistance;
         Vector3 spawnPos = head.position + forwardOffset;
-        spawnPos.y = centerFloatingHeight;
+
+
+        spawnPos.y = head.position.y + 0.30f;
 
         currentCluster = Instantiate(orbClusterPrefab, spawnPos, Quaternion.identity);
         orbitCenter = head.position;
