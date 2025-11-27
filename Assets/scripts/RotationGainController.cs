@@ -46,17 +46,23 @@ public class RotationGainController : MonoBehaviour
         float deltaYaw = Mathf.DeltaAngle(lastHeadYaw, currentYaw);
         lastHeadYaw = currentYaw;
 
-        // Only clockwise head turns
-        if (deltaYaw > 0.01f)
+        // Use absolute value so both head directions trigger clockwise VE rotation
+        float absDelta = Mathf.Abs(deltaYaw);
+
+        if (absDelta > 0.01f)
         {
-            float veRotation = deltaYaw * rotationGain;
+            // Smooth the VE rotation per frame
+            float veRotation = absDelta * rotationGain;
+
+            // Optional: cap maximum rotation per frame to avoid jumps
+            veRotation = Mathf.Min(veRotation, 2f); // max 2 degrees per frame
 
             // Apply rotation around head
             redirectedWorldParent.RotateAround(head.position, Vector3.up, veRotation);
 
-            accumulatedRotation += Mathf.Abs(veRotation);
+            accumulatedRotation += veRotation;
 
-            // Stop when VE rotated 90 degrees
+            // Stop once VE rotated 90 degrees
             if (accumulatedRotation >= targetRotation)
             {
                 isRedirecting = false;
