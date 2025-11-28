@@ -47,11 +47,11 @@ public class OrbDrift : MonoBehaviour
         // PERLIN-NOISE FIRELFY MOVEMENT ----------------------------
 
         float offsetX =
-            (Mathf.PerlinNoise(Time.time * wanderSpeed, noiseX) - 0.5f)
+            (Mathf.PerlinNoise(Time.time * wanderSpeed, noiseX) - 0.8f)
             * driftAmount;
 
         float offsetZ =
-            (Mathf.PerlinNoise(Time.time * wanderSpeed, noiseZ) - 0.5f)
+            (Mathf.PerlinNoise(Time.time * wanderSpeed, noiseZ) - 0.8f)
             * driftAmount;
 
         float offsetY =

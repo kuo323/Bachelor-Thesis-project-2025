@@ -4274,17 +4274,17 @@ MonoBehaviour:
   orbClusterPrefab: {fileID: 8888256157671488156, guid: f5ccf961191578e45b56f1d010425c43, type: 3}
   orbPrefab: {fileID: 6820142306699182240, guid: 3beebd11448f7e84185fbcbd221377ea, type: 3}
   clusterSize: {x: 2, y: 1, z: 2}
-  minOrbsPerCluster: 100
-  maxOrbsPerCluster: 300
+  minOrbsPerCluster: 250
+  maxOrbsPerCluster: 500
   rotationSpeed: 70
   followSpeed: 50
   isHit: 0
-  rotationSpeedAfterHit: 80
+  rotationSpeedAfterHit: 85
   afterHitSpeedDuration: 3
   minSwitchTime: 1
   maxSwitchTime: 2.5
-  minDistance: 0.5
-  maxDistance: 1
+  minDistance: 0.4
+  maxDistance: 0.8
   distanceOscillationSpeed: 1
 --- !u!1 &555059291
 GameObject:
@@ -11729,7 +11729,7 @@ Transform:
   m_GameObject: {fileID: 1431322591}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.110001, y: 0, z: -2.34}
+  m_LocalPosition: {x: 9.110001, y: 0, z: -2.74}
   m_LocalScale: {x: 15.268521, y: 6.1584, z: 7.2448053}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13097,9 +13097,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distractionController: {fileID: 540425674}
   redirectedWorldParent: {fileID: 502358326}
-  rotationGain: 0.5
+  rotationGain: 0.15
   targetRotation: 90
   isRedirecting: 0
+  hasRotatedOnce: 0
+  burstDuration: 1.2
 --- !u!114 &1603656504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17176,10 +17178,10 @@ SceneRoots:
   - {fileID: 540425673}
   - {fileID: 1540296785}
   - {fileID: 502358326}
-  - {fileID: 1252833359}
   - {fileID: 1972716642}
   - {fileID: 1738589298}
   - {fileID: 2143244684}
   - {fileID: 983588718}
   - {fileID: 1916100251}
   - {fileID: 1636077443}
+  - {fileID: 1252833359}

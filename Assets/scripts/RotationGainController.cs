@@ -20,8 +20,13 @@ public class RotationGainController : MonoBehaviour
     private float accumulatedRotation = 0f;
 
     //single-use flag
-    private bool hasRotatedOnce = false;
+    public bool hasRotatedOnce = false;
 
+
+
+    //new burst gain for collider ///
+    private float gainDuration = 0f;
+    public float burstDuration = 1.5f; // how long gain stays active
 
     void Start()
     {
@@ -39,37 +44,45 @@ public class RotationGainController : MonoBehaviour
 
     void Update()
     {
+        // Stop everything if VE rotation reached 90°
+        if (hasRotatedOnce)
+        {
+            isRedirecting = false;
+            return;
+        }
+
+        // Count down burst duration
+        if (gainDuration > 0f)
+        {
+            gainDuration -= Time.deltaTime;
+            if (!isRedirecting) isRedirecting = true;
+        }
+        else
+        {
+            isRedirecting = false;
+        }
 
         if (!isRedirecting) return;
 
+        // Compute rotation delta
         float currentYaw = head.eulerAngles.y;
         float deltaYaw = Mathf.DeltaAngle(lastHeadYaw, currentYaw);
         lastHeadYaw = currentYaw;
 
-        // Use absolute value so both head directions trigger clockwise VE rotation
         float absDelta = Mathf.Abs(deltaYaw);
+        if (absDelta < 0.01f) return;
 
-        if (absDelta > 0.01f)
+        float veRotation = Mathf.Min(absDelta * rotationGain, 2f);
+        redirectedWorldParent.RotateAround(head.position, Vector3.up, veRotation);
+
+        accumulatedRotation += veRotation;
+
+        // Stop permanently at 90°
+        if (accumulatedRotation >= targetRotation)
         {
-            // Smooth the VE rotation per frame
-            float veRotation = absDelta * rotationGain;
-
-            // Optional: cap maximum rotation per frame to avoid jumps
-            veRotation = Mathf.Min(veRotation, 2f); // max 2 degrees per frame
-
-            // Apply rotation around head
-            redirectedWorldParent.RotateAround(head.position, Vector3.up, veRotation);
-
-            accumulatedRotation += veRotation;
-
-            // Stop once VE rotated 90 degrees
-            if (accumulatedRotation >= targetRotation)
-            {
-                isRedirecting = false;
-                hasRotatedOnce = true;
-                // distractionController?.DeactivateDistraction();
-                Debug.Log("✅ VE rotation complete: 90° achieved. Single-use flag set.");
-            }
+            isRedirecting = false;
+            hasRotatedOnce = true;
+            Debug.Log("✅ VE rotation complete: 90° reached. No more bursts allowed.");
         }
     }
 
@@ -77,13 +90,12 @@ public class RotationGainController : MonoBehaviour
     {
 
         if (hasRotatedOnce) return;
-        
-        accumulatedRotation = 0f;
+
+        gainDuration = burstDuration;
         lastHeadYaw = head.eulerAngles.y;
         isRedirecting = true;
 
-    //    distractionController.SpawnCluster();
-        Debug.Log("➡ Rotation gain started (single-use).");
+        Debug.Log("➡ Rotation gain burst started.");
     }
 
 

@@ -15,7 +15,7 @@ public class RotationGainTrigger : MonoBehaviour
 
         if (!gainController.isRedirecting && !clusterSpawnedOnce)
         {
-            gainController.StartRedirection();
+         //   gainController.StartRedirection();
             distractionManager.SpawnCluster();
             clusterSpawnedOnce = true;
 

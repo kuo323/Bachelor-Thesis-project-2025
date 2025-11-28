@@ -70,26 +70,24 @@ public class DistractionManager : MonoBehaviour
     {
         if (currentCluster != null)
         {
-            if (!panicMode)
-            {
-                UpdateOrbitBehavior();
-                RotateCluster();      
-               
-                UpdateOrbitDistance();
-               
-                
-            }
-            else
-            {
-                rotationSpeed = rotationSpeed + 15f;
-                followSpeed = followSpeed + 10f;
-            } 
-        }
+            // Always update orbit behavior and movement
+            UpdateOrbitBehavior();
+            RotateCluster();
+            UpdateOrbitDistance();
 
-        if (isHit && afterHitSpeedDuration > 0)
-        {
-            rotationSpeed = rotationSpeedAfterHit;
-            afterHitSpeedDuration -= Time.deltaTime;
+            // Speed boost after some orbs are absorbed
+            if (panicMode)
+            {
+                rotationSpeed = rotationSpeedAfterHit; // or increase by a fixed amount
+                followSpeed = followSpeed + 10f * Time.deltaTime;
+            }
+
+            // Optional: temporary speed boost after hitting
+            if (isHit && afterHitSpeedDuration > 0)
+            {
+                rotationSpeed = rotationSpeedAfterHit;
+                afterHitSpeedDuration -= Time.deltaTime;
+            }
         }
     }
 
@@ -246,10 +244,26 @@ public class DistractionManager : MonoBehaviour
             // Disable respawn triggers
             panicMode = false;
             isHit = false;
+
+
+          
+
+
+
+
         }
 
 
     }
+
+
+    
+
+
+
+
+
+
 
 }
 

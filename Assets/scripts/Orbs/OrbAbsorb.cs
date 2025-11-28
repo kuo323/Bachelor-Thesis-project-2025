@@ -23,11 +23,6 @@ public class OrbAbsorb : MonoBehaviour
     private Transform absorberStick;      // reference to the stick that touched the orb
 
 
-
-
-    // ---- Redirection System ----
-   // private float redirectionTimer = 0f;
- //   public float redirectionDuration = 1f;
    
 
 
@@ -54,13 +49,6 @@ public class OrbAbsorb : MonoBehaviour
         if (other.CompareTag("PlayerHand"))
         {
             isTouched = true;
-
-
-
-          //  rotationGainController.StartRedirection();
-       
-
-
 
 
 
@@ -92,7 +80,9 @@ public class OrbAbsorb : MonoBehaviour
         // --- Absorb logic ---
         if (isTouched && rightTrigger && !isBeingAbsorbed)
         {
-           
+
+            // Trigger rotation burst only when pressing trigger
+            rotationGainController.StartRedirection();
 
             distractionManager?.afterHit();
 
