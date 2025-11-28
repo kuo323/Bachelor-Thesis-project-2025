@@ -25,6 +25,14 @@ public class OrbAbsorb : MonoBehaviour
 
 
 
+    // ---- Redirection System ----
+   // private float redirectionTimer = 0f;
+ //   public float redirectionDuration = 1f;
+   
+
+
+
+
     private void Start()
     {
 
@@ -46,6 +54,16 @@ public class OrbAbsorb : MonoBehaviour
         if (other.CompareTag("PlayerHand"))
         {
             isTouched = true;
+
+
+
+          //  rotationGainController.StartRedirection();
+       
+
+
+
+
+
         }
     }
 
@@ -54,49 +72,41 @@ public class OrbAbsorb : MonoBehaviour
         if (other.CompareTag("PlayerHand"))
         {
             isTouched = false;
+
+         
+
         }
+
+     
+
+
+
     }
 
     private void Update()
     {
         bool rightTrigger = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch);
 
-      
+        
+
+        // --- Absorb logic ---
         if (isTouched && rightTrigger && !isBeingAbsorbed)
         {
+           
 
-
-            // Apply rotation gain first
-
-         //  rotationGainController?.ApplyRotationGain();
-
-
-
-            // Notify the cluster to speed up
             distractionManager?.afterHit();
 
-
-            // Get parent object of the objects tthat just get hit 
             Transform cluster = transform.parent;
-           //// Loop through all orbs in the cluster with foreach
             foreach (Transform orb in cluster)
             {
-                if (orb == transform) continue; // skip the hit orb
+                if (orb == transform) continue;
 
                 OrbDrift drift = orb.GetComponent<OrbDrift>();
                 if (drift != null)
                     drift.Oncehit();
             }
 
-
-
-
-            // Start absorption animation
             StartCoroutine(Absorb());
-
-
-
-
         }
     }
 
@@ -130,6 +140,7 @@ public class OrbAbsorb : MonoBehaviour
 
         // Notify manager that this orb is fully absorbed
         distractionManager?.OrbAbsorbed();
+        
 
         Destroy(gameObject);
     }

@@ -3,7 +3,9 @@
 public class RotationGainTrigger : MonoBehaviour
 {
     public RotationGainController gainController;
-    
+    public DistractionManager distractionManager;
+
+    private bool clusterSpawnedOnce = false;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -11,11 +13,15 @@ public class RotationGainTrigger : MonoBehaviour
 
         if (!other.CompareTag("MainCamera")) return;
 
-        if (!gainController.isRedirecting)
+        if (!gainController.isRedirecting && !clusterSpawnedOnce)
         {
             gainController.StartRedirection();
-            Debug.Log("➡ User entered trigger zone: rotation gain started.");
+            distractionManager.SpawnCluster();
+            clusterSpawnedOnce = true;
+
+            Debug.Log("➡ User entered trigger zone: rotation gain started & cluster spawned once.");
         }
+
     }
 
 

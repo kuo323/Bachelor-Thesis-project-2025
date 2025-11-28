@@ -82,8 +82,14 @@ public class RotationGainController : MonoBehaviour
         lastHeadYaw = head.eulerAngles.y;
         isRedirecting = true;
 
-        distractionController.SpawnCluster();
+    //    distractionController.SpawnCluster();
         Debug.Log("➡ Rotation gain started (single-use).");
     }
+
+
+  
+
+
+
 
 }

@@ -27,6 +27,10 @@ public class DistractionManager : MonoBehaviour
     [Header("Orbit Settings")]
     public float rotationSpeed = 20f;           // degrees per second
     public float followSpeed = 2f;              // orbit center follow speed
+
+
+
+
     public bool isHit = false;
     public float rotationSpeedAfterHit = 40f;
     public float afterHitSpeedDuration = 5f;
@@ -34,10 +38,6 @@ public class DistractionManager : MonoBehaviour
     private float angle = 0f;                   // current rotation angle
     private float rotationDir = 1f;
     private float orbitRadius;
-
-
-    private float spawnSmoothTime = 2f; // seconds to ignore orbit distance updates
-    private float spawnTimer = 0f;        // countdown timer
 
 
 
@@ -54,13 +54,11 @@ public class DistractionManager : MonoBehaviour
     public float distanceOscillationSpeed = 1f; // speed of distance oscillation
 
     [Header("Cluster Move to Center")]
-    public Vector3 roomCenter = Vector3.zero;
-    public float moveToCenterSpeed = 1.5f;
-    private float centerFloatingHeight = 1.65f;
+   
 
     private int totalOrbs = 0;
     private int absorbedOrbs = 0;
-    private bool movingToCenter = false;
+    private bool panicMode = false;
 
     void Start()
     {
@@ -72,29 +70,20 @@ public class DistractionManager : MonoBehaviour
     {
         if (currentCluster != null)
         {
-            if (!movingToCenter)
+            if (!panicMode)
             {
                 UpdateOrbitBehavior();
-                RotateCluster();
-
-                if (spawnTimer <= 0f)
-                {
-                    UpdateOrbitDistance();
-                }
-                else
-                {
-                    spawnTimer -= Time.deltaTime;
-                }
+                RotateCluster();      
+               
+                UpdateOrbitDistance();
+               
+                
             }
             else
             {
-                Vector3 centerPos = new Vector3(roomCenter.x, centerFloatingHeight, roomCenter.z);
-                currentCluster.transform.position = Vector3.Lerp(
-                    currentCluster.transform.position,
-                    centerPos,
-                    Time.deltaTime * moveToCenterSpeed
-                );
-            }
+                rotationSpeed = rotationSpeed + 15f;
+                followSpeed = followSpeed + 10f;
+            } 
         }
 
         if (isHit && afterHitSpeedDuration > 0)
@@ -140,8 +129,6 @@ public class DistractionManager : MonoBehaviour
 
         Vector3 forwardOffset = head.forward * maxDistance;
         Vector3 spawnPos = head.position + forwardOffset;
-
-
         spawnPos.y = head.position.y + 0.30f;
 
         currentCluster = Instantiate(orbClusterPrefab, spawnPos, Quaternion.identity);
@@ -151,14 +138,14 @@ public class DistractionManager : MonoBehaviour
         orbitRadius = (minDistance + maxDistance) / 2f;
 
 
-        spawnTimer = spawnSmoothTime;
+     
 
 
 
         int orbCount = Random.Range(minOrbsPerCluster, maxOrbsPerCluster + 1);
         totalOrbs = orbCount;
         absorbedOrbs = 0;
-        movingToCenter = false;
+        panicMode = false;
 
         ResetOrbitBehavior();
 
@@ -179,11 +166,15 @@ public class DistractionManager : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// ords fly around the users head 
+    /// </summary>
     private void RotateCluster()
     {
         if (currentCluster == null) return;
 
-        if (spawnTimer > 0f) return;
+       
 
 
 
@@ -203,6 +194,11 @@ public class DistractionManager : MonoBehaviour
         currentCluster.transform.position = new Vector3(x, y, z);
     }
 
+
+
+    /// <summary>
+    /// ords fly around the users head with smooth motions 
+    /// </summary>
     private void UpdateOrbitDistance()
     {
         if (currentCluster == null) return;
@@ -213,8 +209,8 @@ public class DistractionManager : MonoBehaviour
         Vector3 direction = (currentCluster.transform.position - head.position).normalized;
         Vector3 newPos = head.position + direction * targetDistance;
 
-        float floatOffset = Mathf.Sin(Time.time * 1.5f) * 0.2f;
-        newPos.y = centerFloatingHeight + floatOffset;
+        float floatOffset = Mathf.Sin(Time.time * 1.5f) * 0.3f;
+        newPos.y = head.position.y + 0.3f + floatOffset;
 
         currentCluster.transform.position = newPos;
 
@@ -231,10 +227,28 @@ public class DistractionManager : MonoBehaviour
     public void OrbAbsorbed()
     {
         absorbedOrbs++;
-        if (!movingToCenter && absorbedOrbs >= Mathf.CeilToInt(totalOrbs * 2f / 3f))
+        if (!panicMode && absorbedOrbs >= Mathf.CeilToInt(totalOrbs * 2f / 3f))
         {
-            movingToCenter = true;
+            panicMode = true;
         }
+
+
+        // ---------- NEW: Destroy cluster & stop respawn ----------
+        if (absorbedOrbs >= totalOrbs)
+        {
+            // Remove cluster
+            Destroy(currentCluster);
+            currentCluster = null;
+
+            Debug.Log("All orbs absorbed — cluster removed.");
+
+            // IMPORTANT:
+            // Disable respawn triggers
+            panicMode = false;
+            isHit = false;
+        }
+
+
     }
 
 }

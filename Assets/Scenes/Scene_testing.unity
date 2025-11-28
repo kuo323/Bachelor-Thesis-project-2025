@@ -4277,7 +4277,7 @@ MonoBehaviour:
   minOrbsPerCluster: 100
   maxOrbsPerCluster: 300
   rotationSpeed: 70
-  followSpeed: 30
+  followSpeed: 50
   isHit: 0
   rotationSpeedAfterHit: 80
   afterHitSpeedDuration: 3
@@ -4286,8 +4286,6 @@ MonoBehaviour:
   minDistance: 0.5
   maxDistance: 1
   distanceOscillationSpeed: 1
-  roomCenter: {x: 0, y: 0, z: 0}
-  moveToCenterSpeed: 0.2
 --- !u!1 &555059291
 GameObject:
   m_ObjectHideFlags: 0
@@ -13099,7 +13097,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distractionController: {fileID: 540425674}
   redirectedWorldParent: {fileID: 502358326}
-  rotationGain: 0.1
+  rotationGain: 0.5
   targetRotation: 90
   isRedirecting: 0
 --- !u!114 &1603656504
@@ -17027,6 +17025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gainController: {fileID: 1603656503}
+  distractionManager: {fileID: 540425674}
 --- !u!1 &2144321440
 GameObject:
   m_ObjectHideFlags: 0
