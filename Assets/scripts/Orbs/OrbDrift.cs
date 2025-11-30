@@ -26,10 +26,10 @@ public class OrbDrift : MonoBehaviour
     {
         startPos = transform.localPosition;
 
-        floatSpeed = Random.Range(1f, 2f);       // vertical floating
-        wanderSpeed = Random.Range(1f, 2f);  // horizontal wandering
+        floatSpeed = Random.Range(3f, 3f);       // vertical floating
+        wanderSpeed = Random.Range(3f, 3f);  // horizontal wandering
 
-        driftAmount = Random.Range(6.5f, 3.0f);
+        driftAmount = Random.Range(7.0f, 4.5f);
         normalDriftAmount = driftAmount;
 
         // give this orb its own perlin noise seed values
