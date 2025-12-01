@@ -123,51 +123,6 @@ public class DistractionManager : MonoBehaviour
     //       EXISTING LOGIC
     // ------------------------
 
-    public void SpawnCluster()
-    {
-
-
-      
-
-        Vector3 forwardOffset = head.forward * maxDistance;
-        Vector3 spawnPos = head.position + forwardOffset;
-        spawnPos.y = head.position.y + 0.30f;
-
-        currentCluster = Instantiate(orbClusterPrefab, spawnPos, Quaternion.identity);
-        orbitCenter = head.position;
-
-       // orbitRadius = Vector3.Distance(currentCluster.transform.position, head.position);
-        orbitRadius = (minDistance + maxDistance) / 2f;
-
-
-     
-
-
-
-        int orbCount = Random.Range(minOrbsPerCluster, maxOrbsPerCluster + 1);
-        totalOrbs = orbCount;
-        absorbedOrbs = 0;
-        panicMode = false;
-
-        ResetOrbitBehavior();
-
-        for (int j = 0; j < orbCount; j++)
-        {
-            GameObject orb = Instantiate(orbPrefab, currentCluster.transform);
-            orb.transform.localPosition = new Vector3(
-                Random.Range(-clusterSize.x / 2f, clusterSize.x / 2f),
-                Random.Range(-clusterSize.y / 2f, clusterSize.y / 2f),
-                Random.Range(-clusterSize.z / 2f, clusterSize.z / 2f)
-            );
-
-            OrbDrift drift = orb.AddComponent<OrbDrift>();
-            OrbAbsorb absorb = orb.AddComponent<OrbAbsorb>();
-
-            absorb.rotationGainController = rotationGainController;
-            absorb.distractionManager = this;
-        }
-    }
-
 
     /// <summary>
     /// ords fly around the users head 
@@ -229,12 +184,10 @@ public class DistractionManager : MonoBehaviour
     public void OrbAbsorbed()
     {
         absorbedOrbs++;
-        if (!panicMode && absorbedOrbs >= Mathf.CeilToInt(totalOrbs * 2f / 3f))
-        {
-            panicMode = true;
-        }
 
-        // If all orbs are gone...
+        if (!panicMode && absorbedOrbs >= Mathf.CeilToInt(totalOrbs * 2f / 3f))
+            panicMode = true;
+
         if (absorbedOrbs >= totalOrbs)
         {
             Destroy(currentCluster);
@@ -245,54 +198,56 @@ public class DistractionManager : MonoBehaviour
             panicMode = false;
             isHit = false;
 
-
-
+            // If rotation already achieved, stop
             if (rotationGainController != null && rotationGainController.hasRotatedOnce)
             {
                 Debug.Log("Rotation goal reached — no more respawns.");
                 return;
             }
-            else
-            {
-                // avoid double-starting
-                if (gradualRespawnRoutine == null)
-                    gradualRespawnRoutine = StartCoroutine(RespawnClusterSlowly());
-            }
 
+            // Otherwise spawn new ones
+            RequestRespawn();
         }
-
 
     }
 
 
-    /// <summary>
-    /// This is the part that spawns the new orbs one by one: if the first cluster all get killed
-    /// but 180 reset hasnt reached yet
-    /// </summary>
-    /// <returns></returns>
+    // -----------------------------------------
+    // Respawn System
+    // -----------------------------------------
 
-    private IEnumerator RespawnClusterSlowly()
+    public void RequestRespawn()
     {
-        // wait a bit before starting
+        if (gradualRespawnRoutine == null)
+            gradualRespawnRoutine = StartCoroutine(SpawnClusterRoutine());
+    }
+
+    public void SpawnCluster()
+    {
+        if (gradualRespawnRoutine == null)
+            gradualRespawnRoutine = StartCoroutine(SpawnClusterRoutine());
+    }
+
+    private IEnumerator SpawnClusterRoutine()
+    {
         yield return new WaitForSeconds(respawnDelay);
 
-        // If rotation goal reached in the meantime, abort
         if (rotationGainController != null && rotationGainController.hasRotatedOnce)
         {
             gradualRespawnRoutine = null;
             yield break;
         }
 
-        // Create a new cluster container at appropriate position
+        // Create empty cluster
         Vector3 forwardOffset = head.forward * maxDistance;
         Vector3 spawnPos = head.position + forwardOffset;
         spawnPos.y = head.position.y + 0.30f;
 
         currentCluster = Instantiate(orbClusterPrefab, spawnPos, Quaternion.identity);
+
         orbitCenter = head.position;
         orbitRadius = (minDistance + maxDistance) / 2f;
 
-        // decide how many orbs to spawn (same as original cluster size)
         int orbCount = Random.Range(minOrbsPerCluster, maxOrbsPerCluster + 1);
         totalOrbs = orbCount;
         absorbedOrbs = 0;
@@ -302,7 +257,6 @@ public class DistractionManager : MonoBehaviour
 
         for (int i = 0; i < orbCount; i++)
         {
-            // If rotation goal reached mid-spawn, stop spawning
             if (rotationGainController != null && rotationGainController.hasRotatedOnce)
                 break;
 
@@ -313,20 +267,18 @@ public class DistractionManager : MonoBehaviour
                 Random.Range(-clusterSize.z / 2f, clusterSize.z / 2f)
             );
 
+            // Attach behaviors
             OrbDrift drift = orb.AddComponent<OrbDrift>();
             OrbAbsorb absorb = orb.AddComponent<OrbAbsorb>();
-
             absorb.rotationGainController = rotationGainController;
             absorb.distractionManager = this;
 
-            // small delay between spawns
             yield return new WaitForSeconds(orbSpawnInterval);
         }
 
+        Debug.Log("Cluster spawn complete.");
         gradualRespawnRoutine = null;
-        Debug.Log("Gradual cluster spawn complete.");
     }
-
 
 
 
