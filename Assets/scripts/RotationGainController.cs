@@ -6,6 +6,7 @@ using UnityEngine;
 public class RotationGainController : MonoBehaviour
 {
     public DistractionManager distractionController;
+    public GameObject psObject; // Assign the ParticleSystem GameObject
 
     public Transform redirectedWorldParent;
     public float rotationGain = 0.1f;
@@ -82,6 +83,7 @@ public class RotationGainController : MonoBehaviour
         {
             isRedirecting = false;
             hasRotatedOnce = true;
+            DisableParticleObject();
             Debug.Log("✅ VE rotation complete: 90° reached. No more bursts allowed.");
         }
     }
@@ -99,8 +101,14 @@ public class RotationGainController : MonoBehaviour
     }
 
 
-  
 
+    void DisableParticleObject()
+    {
+        if (psObject != null)
+        {
+            psObject.SetActive(false); // Disables everything on that object
+        }
+    }
 
 
 

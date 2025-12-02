@@ -17,7 +17,7 @@ public class LanternGlowController : MonoBehaviour
 
     
     private float currentEmission;
-    private bool isBoosted = false;
+    private bool flickering = true;
 
     void Start()
     {
@@ -31,19 +31,13 @@ public class LanternGlowController : MonoBehaviour
 
     void Update()
     {
-        if (!isBoosted)
+        if (flickering)
         {
-            // Idle flicker using Perlin Noise for smooth randomness
             float flicker = Mathf.Lerp(minFlicker, maxFlicker, Mathf.PerlinNoise(Time.time * flickerSpeed, 0f));
             currentEmission = flicker;
-        }
-        else
-        {
-            // Smoothly decay emission back to idle range
-            currentEmission = Mathf.Lerp(currentEmission, maxFlicker, Time.deltaTime * decaySpeed);
+            SetEmission(currentEmission);
         }
 
-        SetEmission(currentEmission);
     }
 
     /// <summary>
@@ -51,18 +45,16 @@ public class LanternGlowController : MonoBehaviour
     /// </summary>
     public void AbsorbBoost()
     {
+
+        flickering = false;
         currentEmission += absorbIncrement;
         currentEmission = Mathf.Clamp(currentEmission, 0f, maxEmission);
 
-        // Optional: mark as boosted to temporarily prevent flicker override
-        isBoosted = true;
-        Invoke("ResetBoosted", 0.1f);
+        SetEmission(currentEmission); // apply the change immediately
+
+
     }
 
-    private void ResetBoosted()
-    {
-        isBoosted = false;
-    }
 
     /// <summary>
     /// Set both emission and light intensity

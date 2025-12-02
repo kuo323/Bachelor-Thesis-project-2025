@@ -5,7 +5,7 @@ public class RotationGainTrigger : MonoBehaviour
     public RotationGainController gainController;
     public DistractionManager distractionManager;
 
-    private bool clusterSpawnedOnce = false;
+    public bool clusterSpawnedOnce { get; private set; } = false;
 
     private void OnTriggerEnter(Collider other)
     {
