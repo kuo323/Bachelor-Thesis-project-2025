@@ -7,6 +7,7 @@ public class RotationGainController : MonoBehaviour
 {
     public DistractionManager distractionController;
     public GameObject psObject; // Assign the ParticleSystem GameObject
+    public GameObject arrowUI;
 
     public Transform redirectedWorldParent;
     public float rotationGain = 0.1f;
@@ -41,6 +42,12 @@ public class RotationGainController : MonoBehaviour
         }
 
         lastHeadYaw = head.eulerAngles.y;
+
+
+        arrowUI.SetActive(false);
+
+
+
     }
 
     void Update()
@@ -84,6 +91,7 @@ public class RotationGainController : MonoBehaviour
             isRedirecting = false;
             hasRotatedOnce = true;
             DisableParticleObject();
+            EnableArrow();
             Debug.Log("✅ VE rotation complete: 90° reached. No more bursts allowed.");
         }
     }
@@ -108,8 +116,24 @@ public class RotationGainController : MonoBehaviour
         {
             psObject.SetActive(false); // Disables everything on that object
         }
+
+
+
+       
+
+
     }
 
+    void EnableArrow()
+    {
 
+        if (arrowUI != null)
+        {
+
+            arrowUI.SetActive(true);
+        }
+
+
+    }
 
 }
