@@ -5,6 +5,9 @@ using UnityEngine;
 public class DistractionManager : MonoBehaviour
 {
 
+    public GameObject absorbFXPrefab; // contains 2 particles effect as children
+
+
     public RotationGainController rotationGainController; // assign in Inspector
     public LanternGlowController lanternGlow; /// notify the lantern every time an orb is absorbed
 
@@ -276,11 +279,14 @@ public class DistractionManager : MonoBehaviour
                 Random.Range(-clusterSize.z / 2f, clusterSize.z / 2f)
             );
 
-            // Attach behaviors
+
+            // Attach behaviors // link the variable or functions from OrbAbsorb script to here
             OrbDrift drift = orb.AddComponent<OrbDrift>();
             OrbAbsorb absorb = orb.AddComponent<OrbAbsorb>();
             absorb.rotationGainController = rotationGainController;
             absorb.distractionManager = this;
+            absorb.absorbFXPrefab = absorbFXPrefab;
+
 
             yield return new WaitForSeconds(orbSpawnInterval);
         }

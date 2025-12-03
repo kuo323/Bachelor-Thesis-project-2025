@@ -25552,7 +25552,7 @@ MonoBehaviour:
   candleLight: {fileID: 1543357273}
   intensityMultiplier: 2
   minFlicker: 0.05
-  maxFlicker: 0.2
+  maxFlicker: 1
   flickerSpeed: 10
   absorbIncrement: 5
   maxEmission: 10
@@ -58939,8 +58939,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 2
-  m_Color: {r: 0.509434, g: 0.345446, b: 0.034603048, a: 1}
-  m_Intensity: 0.2
+  m_Color: {r: 0.32452822, g: 0.21188205, b: 0, a: 1}
+  m_Intensity: 0.5
   m_Range: 2.77
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -69272,6 +69272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a7a561360d149d4a81cc09cabc7e546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  absorbFXPrefab: {fileID: 3153778238762527717, guid: 539ae32508260a54cb5d10b6a721a8f8, type: 3}
   rotationGainController: {fileID: 1869751972}
   lanternGlow: {fileID: 569550554}
   orbClusterPrefab: {fileID: 8888256157671488156, guid: f5ccf961191578e45b56f1d010425c43, type: 3}
@@ -69914,7 +69915,7 @@ Transform:
   m_GameObject: {fileID: 1869957719}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.26598775, z: -0, w: 0.9639764}
-  m_LocalPosition: {x: 1.56, y: 0.49, z: 4.3}
+  m_LocalPosition: {x: 0.15, y: 0.49, z: 1.94}
   m_LocalScale: {x: 5.6589756, y: 2.7063367, z: 2.160933}
   m_ConstrainProportionsScale: 0
   m_Children: []

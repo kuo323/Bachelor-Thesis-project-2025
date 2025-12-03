@@ -1,7 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class OrbAbsorb : MonoBehaviour
 {
+
+
+    [HideInInspector] public GameObject absorbFXPrefab;   // LATER LINK THIS TO DISTRACTION MANAGER
+  
+
+
 
     /// <summary>
     /// grab the rotationGainController reference from DistractionManager 
@@ -130,8 +136,16 @@ public class OrbAbsorb : MonoBehaviour
 
         // Notify manager that this orb is fully absorbed
         distractionManager?.OrbAbsorbed();
-        
 
+        // Spawn and then destry the particle FX of the orbs 
+        if (absorbFXPrefab != null)
+        {
+            GameObject fx = Instantiate(absorbFXPrefab, transform.position, Quaternion.identity);
+            Destroy(fx, 2f); // auto cleanup
+        }
+
+
+        //destroy the orbs 
         Destroy(gameObject);
     }
 
