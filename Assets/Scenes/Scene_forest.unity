@@ -42982,7 +42982,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &841817952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74877,7 +74877,7 @@ MonoBehaviour:
   distractionController: {fileID: 1859521852}
   psObject: {fileID: 193838098}
   arrowUI: {fileID: 1743932302}
-  redirectedWorldParent: {fileID: 631420802}
+  xrRig: {fileID: 2110492851}
   rotationGain: 0.2
   targetRotation: 180
   isRedirecting: 0
@@ -75072,7 +75072,7 @@ Transform:
   m_GameObject: {fileID: 1869957719}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.57, y: 0.49, z: 4.88}
+  m_LocalPosition: {x: 0.57, y: 0.49, z: 5.34}
   m_LocalScale: {x: 7.897666, y: 2.7063367, z: 1.4554157}
   m_ConstrainProportionsScale: 0
   m_Children: []
