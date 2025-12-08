@@ -26,6 +26,12 @@ public class RotationGainController : MonoBehaviour
 
     private float lastHeadYaw;
 
+
+    /// <summary>
+    /// Notify the door that it can be opened
+    /// </summary>
+    public bool enableDoor = false;
+
     void Start()
     {
         head = CameraManager.Instance.head;
@@ -77,6 +83,9 @@ public class RotationGainController : MonoBehaviour
             isRedirecting = false;
             DisableParticleObject();
             EnableArrow();
+            EnableDoorOpen();
+
+
             Debug.Log("🎉 90° rotation achieved — redirection completed.");
         }
     }
@@ -102,4 +111,12 @@ public class RotationGainController : MonoBehaviour
             arrowUI.SetActive(true);
     }
 
+    void EnableDoorOpen()
+    {
+        enableDoor = true;
+    }
+
+
+
 }
+
