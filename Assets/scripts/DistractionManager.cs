@@ -10,6 +10,7 @@ public class DistractionManager : MonoBehaviour
 
     public RotationGainController rotationGainController; // assign in Inspector
     public LanternGlowController lanternGlow; /// notify the lantern every time an orb is absorbed
+    public OrbFillUI orbFillUI;
 
     [Header("Prefabs")]
     public GameObject orbClusterPrefab; // empty cluster prefab
@@ -193,6 +194,14 @@ public class DistractionManager : MonoBehaviour
         if (lanternGlow != null)
         {
             lanternGlow.AbsorbBoost();
+
+        }
+
+
+        if (orbFillUI != null)
+        {
+
+            orbFillUI.AbsorbCount();
 
         }
         

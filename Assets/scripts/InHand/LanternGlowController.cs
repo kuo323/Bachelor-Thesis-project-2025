@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class LanternGlowController : MonoBehaviour
 {
+    [Header("Audio Settings")]
+    public AudioSource absorbSound; // assign an AudioSource in the Inspector
+
+
     [Header("Light Settings")]
     public Light candleLight;              // Point Light inside the lantern
     public float intensityMultiplier = 2f; // Multiplies emission value for the light
@@ -52,7 +56,9 @@ public class LanternGlowController : MonoBehaviour
 
         SetEmission(currentEmission); // apply the change immediately
 
-
+        // Play sound
+        if (absorbSound != null)
+            absorbSound.PlayOneShot(absorbSound.clip);
     }
 
 
