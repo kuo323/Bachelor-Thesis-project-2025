@@ -38,7 +38,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BottonLine: 1
+    - _BottonLine: 0
     - _Metalic: 0.11
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -46,9 +46,9 @@ Material:
     - _XRMotionVectorsPass: 1
     - _smoothness: 0.57
     m_Colors:
-    - _BaseColor: {r: 0, g: 1092.3726, b: 1140.1267, a: 0.3921569}
-    - _BottonColor: {r: 0.6597539, g: 0.6597539, b: 0.6597539, a: 1}
-    - _TopColor: {r: 0.80277944, g: 0.80277944, b: 0.80277944, a: 1}
+    - _BaseColor: {r: 0, g: 2032.2014, b: 2032.2014, a: 0.44313726}
+    - _BottonColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TopColor: {r: 1.5157166, g: 1.5157166, b: 1.5157166, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &6886673935055160908

@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Scene_testing.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Scene_forest.unity
     guid: 38bac421d53bab34a9b2e41472b28faf
+  - enabled: 1
+    path: Assets/Scenes/Scene_spaceship.unity
+    guid: f16cc4b7111a1464aa6e72f849d97504
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 3ba5dc33459568443b7815b929f4f6e2, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 7d9f89d3bc1f24f4b899915be4105fb2, type: 2}
