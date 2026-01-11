@@ -22072,7 +22072,7 @@ MonoBehaviour:
   psObject: {fileID: 0}
   arrowUI: {fileID: 734936810}
   xrRig: {fileID: 1040799307}
-  rotationGain: 0.3
+  rotationGain: 0.2
   targetRotation: 270
   isRedirecting: 0
   hasRotatedOnce: 0
